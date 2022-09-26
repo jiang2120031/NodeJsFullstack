@@ -1,0 +1,58 @@
+01
+Query:
+curl -sG http://localhost:1337/products -d tag=dark | ConvertFrom-Json
+
+Get:
+curl -s http://localhost:1337/products/cl887nqvs000074uw9667231o  
+
+Create:
+curl -X POST http://localhost:1337/products -H 'Content-Type: application/json' -d '{\"description\":\"Rug that really ties the room together\",\"imgThumb\":\"https://images.unsplash.com/photo-1534889156217-d643df14f14a?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&xid=eyJhcHBfaWQiOjY0MjAxfQ\",\"img\":\"https://images.unsplash.com/photo-1534889156217-643df14f14a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjY0MjAxfQ\",\"link\":\"https://unsplash.com/photos/Vra_DPrrBlE\",\"userId\":\"GPlq8En0xhg\",\"userName\":\"Ryan Christodoulou\",\"userLink\":\"https://unsplash.com/@misterdoulou\",\"tags\":[\"rug\",\"room\",\"home\",\"bowling\"]}'
+
+Edit:
+curl -X PUT http://localhost:1337/products/cl887nqvs000074uw9667231o -H 'Content-Type: application/json' -d '{\"description\": \"A new Corvette\"}'
+
+Delete:
+curl -X DELETE http://localhost:1337/products/cl887nqvs000074uw9667231o
+
+02
+Create with required field missing:
+
+curl -sX POST http://localhost:1337/products -H 'Content-Type: application/json' -d '{}' | ConvertFrom-Json
+
+create with validation:
+
+curl -sX POST http://localhost:1337/products -H 'Content-Type: application/json' -d '{\"description\":\"Creedence Clearwater Revival\",\"imgThumb\":\"not-a-url\",\"img\":\"https://upload.wikimedia.org/wikipedia/commons/thumbe/ee/Creedence_Clearwater_Revival_1968.jpg/788px-Creedence_Clearwater_Revival_1968.jpg\",\"userId\":\"thedude\",\"userName\":\"Jeffrey Lebowski\"}' | ConvertFrom-Json
+
+Create Order with products:
+
+curl -sX POST http://localhost:1337/products -H 'Content-Type: application/json' -d '{\"description\": \"Creedence Clearwater Revival\",\"imgThumb\": \"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Creedence_Clearwater_Revival_1968.jpg/315px-Creedence_Clearwater_Revival_1968.jpg\",\"img\": \"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Creedence_Clearwater_Revival_1968.jpg/788px-Creedence_Clearwater_Revival_1968.jpg\",\"userId\": \"thedude\",\"userName\": \"Jeffrey Lebowski\"}' | ConvertFrom-Json
+
+curl -sX POST http://localhost:1337/orders -H 'Content-Type: application/json' -d '{\"buyerEmail\": \"walter@sobchak.io\",\"products\": [\"cl88irb6d000094uw6du0380a\"]}' | ConvertFrom-Json
+
+curl -s http://localhost:1337/orders | ConvertFrom-json
+
+authenticate without cookie
+curl -i http://localhost:1337/orders
+
+with correct password
+curl -iX POST -H 'content-type: application/json' -d '{\"username\": \"admin\", \"password\": \"iamthewalrus\"}' --cookie-jar cookies.txt http://localhost:1337/login
+curl -i --cookie cookies.txt http://localhost:1337/orders
+
+Jwt：
+curl -X POST -H 'content-type: application/json' -d '{\"username\": \"admin\", \"password\": \"iamthewalrus\"} 'http://localhost:1337/login
+
+curl -H "authorization: Bearer $(cat admin.jwt)" http://localhost:1337/orders
+
+Create Order with products with jwt:
+
+curl -sX POST http://localhost:1337/products -H "authorization: Bearer $(cat admin.jwt)" -H 'Content-Type: application/json' -d '{\"description\": \"Creedence Clearwater Revival\",\"imgThumb\": \"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Creedence_Clearwater_Revival_1968.jpg/315px-Creedence_Clearwater_Revival_1968.jpg\",\"img\": \"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Creedence_Clearwater_Revival_1968.jpg/788px-Creedence_Clearwater_Revival_1968.jpg\",\"userId\": \"thedude\",\"userName\": \"Jeffrey Lebowski\"}' | ConvertFrom-Json
+
+curl -sX POST http://localhost:1337/orders -H "authorization: Bearer $(cat admin.jwt)" -H 'Content-Type: application/json' -d '{\"buyerEmail\": \"walter@sobchak.io\",\"products\": [\"cl88irb6d000094uw6du0380a\"]}' | ConvertFrom-Json
+
+Create user:
+curl -iX POST -H 'content-type: application/json' -d '{\"username\": \"donny\",\"email\": \"donald@kerabatsos.io\",\"password\": \"I love surfing\" }' http://localhost:1337/users
+Login with user:
+curl -iX POST -H 'content-type: application/json' -d '{\"username\": \"donny\", \"password\": \"I love surfing\"}' http://localhost:1337/login
+
+
+

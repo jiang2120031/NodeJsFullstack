@@ -1,0 +1,35 @@
+ node .\07-cli\01\cli\index-02.js list products --tag tag1
+
+ node .\07-cli\01\cli\index-02.js view product --help
+
+ positional parameter:
+ view product
+ node .\07-cli\01\cli\index-02.js view product cl8fbxzc60000z4uwewssgvxb
+
+ edit product: with username and password
+ node .\07-cli\01\cli\index-02.js edit product cl8fbxzc60000z4uwewssgvxb -u admin -p iamthewalrus -k description -v test1
+  
+ edit product using prompts and chalk api:
+ node .\07-cli\01\cli\index-04.js edit product cl8fbxzc60000z4uwewssgvxb -k description -v test1
+
+ Login:
+  node .\07-cli\01\cli\index-05 login
+ WhoamI:
+  node .\07-cli\01\cli\index-05 whoami
+ LoginOut:
+  node .\07-cli\01\cli\index-05 logout
+
+ edit Product with stored token in netrc:
+ node .\07-cli\01\cli\index-05.js edit product cl8fbxzc60000z4uwewssgvxb -k description -v test1
+
+ 
+ Auto Login In
+ 
+ WhoamI:
+  node .\07-cli\01\cli\index-06 whoami
+ LoginOut:
+  node .\07-cli\01\cli\index-06 logout
+
+ edit Product with stored token in netrc:
+ node .\07-cli\01\cli\index-06.js edit product cl8fbxzc60000z4uwewssgvxb -k description -v test1
+ 
